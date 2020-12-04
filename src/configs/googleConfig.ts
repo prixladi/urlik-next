@@ -1,3 +1,9 @@
-export default {
-  clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string,
+import getConfig from 'next/config';
+
+const config = () => {
+  const { publicRuntimeConfig } = getConfig();
+  const { GOOGLE_CLIENT_ID } = publicRuntimeConfig;
+
+  return { clientId: GOOGLE_CLIENT_ID };
 };
+export default config;

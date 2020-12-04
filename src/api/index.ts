@@ -25,9 +25,10 @@ type CallAction<T> = (client: AxiosInstance, config: AxiosRequestConfig) => Prom
 
 const { OK, MULTIPLE_CHOICES, UNAUTHORIZED } = StatusCodes;
 
-const client = axios.create({
-  baseURL: _BaseUrl,
-});
+const createAxions = () =>
+  axios.create({
+    baseURL: _BaseUrl(),
+  });
 
 const getHeaders = (options: Options) => {
   if (options.shouldAuth)
@@ -60,6 +61,7 @@ const createCallbacks = (router: NextRouter) => ({
 const createClient = (manager: Manager): Client => {
   const call = async <T>(action: CallAction<T>, options: Options) => {
     try {
+      const client = createAxions();
       const config: AxiosRequestConfig = {
         validateStatus: validateStatus(options),
         ...options,

@@ -4,18 +4,17 @@ import buildUrl from 'build-url';
 import { FormikHelpers } from 'formik';
 import { StatusCodes } from 'http-status-codes';
 import { Dispatch, useCallback } from 'react';
-import { UrlDetailModel, _BaseUrl } from '../../api';
-import { UrlikConfig } from '../../configs';
+import { UrlDetailModel } from '../../api';
+import { getUrlikConfig } from '../../configs';
 import { urlsService } from '../../services';
 import { ResponseError } from '../../services/urlsService';
 import { validateUrl } from '../../utils';
 import { Action, Values } from './types';
 
-const urlikUrl = new URL(UrlikConfig.url);
-
 type Errors = Partial<Values>;
 
 const validateValues = (url: URL | null, path: string): Errors | null => {
+  const urlikUrl = new URL(getUrlikConfig().url);
   const errors = {} as Errors;
 
   if (!url) {
@@ -35,7 +34,18 @@ const validateValues = (url: URL | null, path: string): Errors | null => {
   return null;
 };
 
-const useShortenCopyAnonymous = (router: NextRouter) => {
+const validateErrorResponse = (error: ResponseError) => {
+  if (error.status === StatusCodes.BAD_REQUEST) {
+    return { url: 'Url is not valid, provide valid url eg. https://google.com.' };
+  }
+  if (error.status === StatusCodes.CONFLICT) {
+    return { path: 'Provided path is already occupied.' };
+  }
+
+  return { url: 'Server returned error, try again later.' };
+}
+
+const useShortenCopy = (router: NextRouter) => {
   const onSubmmitShortenFactory = useCallback(
     (dispatch: Dispatch<Action>) => async (values: Values, { setErrors }: FormikHelpers<Values>) => {
       const url = validateUrl(values.url, true);
@@ -48,25 +58,18 @@ const useShortenCopyAnonymous = (router: NextRouter) => {
       if ((result as UrlDetailModel).id) {
         const model = result as UrlDetailModel;
         return dispatch({
-          url: buildUrl(UrlikConfig.url, { path: model.path }),
+          url: buildUrl(getUrlikConfig().url, { path: model.path }),
           type: 'shortened',
         });
       }
 
-      const error = result as ResponseError;
-      if (error.status === StatusCodes.BAD_REQUEST) {
-        return setErrors({ url: 'Url is not valid, provide valid url eg. https://google.com.' });
-      }
-      if (error.status === StatusCodes.CONFLICT) {
-        return setErrors({ path: 'Provided path is already occupied.' });
-      }
-
-      return setErrors({ url: 'Server returned error, try again later.' });
+      const responseErrors = validateErrorResponse(result as ResponseError);
+      return setErrors(responseErrors); 
     },
-    []
+    [router]
   );
 
   return useShortenCopyBase<Values>(onSubmmitShortenFactory);
 };
 
-export default useShortenCopyAnonymous;
+export default useShortenCopy;

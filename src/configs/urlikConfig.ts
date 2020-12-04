@@ -1,3 +1,9 @@
-export default {
-  url: process.env.NEXT_PUBLIC_URLIK_URL as string,
+import getConfig from 'next/config';
+
+const config = () => {
+  const { publicRuntimeConfig } = getConfig();
+  const { URLIK_URL } = publicRuntimeConfig;
+
+  return { url: URLIK_URL as string };
 };
+export default config;

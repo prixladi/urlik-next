@@ -4,18 +4,17 @@ import buildUrl from 'build-url';
 import { FormikHelpers } from 'formik';
 import { StatusCodes } from 'http-status-codes';
 import { Dispatch, useCallback } from 'react';
-import { UrlDetailModel, _BaseUrl } from '../../api';
-import { UrlikConfig } from '../../configs';
+import { UrlDetailModel } from '../../api';
+import { getUrlikConfig } from '../../configs';
 import { urlsService } from '../../services';
 import { ResponseError } from '../../services/urlsService';
 import { validateUrl } from '../../utils';
 import { Action, AnonymousValues } from './types';
 
-const urlikUrl = new URL(UrlikConfig.url);
-
 const useShortenCopyAnonymous = (router: NextRouter) => {
   const onSubmmitShortenFactory = useCallback(
     (dispatch: Dispatch<Action>) => async (values: AnonymousValues, { setErrors }: FormikHelpers<AnonymousValues>) => {
+      const urlikUrl = new URL(getUrlikConfig().url);
       const errorModel = { url: 'Url is not valid, provide valid url eg. https://google.com.' };
       const url = validateUrl(values.url, true);
 
@@ -29,7 +28,7 @@ const useShortenCopyAnonymous = (router: NextRouter) => {
       if ((result as UrlDetailModel).id) {
         const model = result as UrlDetailModel;
         return dispatch({
-          url: buildUrl(UrlikConfig.url, { path: model.path }),
+          url: buildUrl(getUrlikConfig().url, { path: model.path }),
           type: 'shortened',
         });
       }

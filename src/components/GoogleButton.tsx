@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import GoogleLogin, { GoogleLoginResponse } from 'react-google-login';
-import { GoogleConfig } from '../configs';
+import { getGoogleConfig } from '../configs';
 import { authService } from '../services';
 import { useRouter } from 'next/router';
 
@@ -15,7 +15,7 @@ const GoogleButton: React.FC<Props> = ({ render, onSuccess }: Props) => {
 
   return (
     <GoogleLogin
-      clientId={GoogleConfig.clientId}
+      clientId={getGoogleConfig().clientId}
       render={(props) => render({ isLoading, ...props })}
       onRequest={() => {
         setIsLoading(true);

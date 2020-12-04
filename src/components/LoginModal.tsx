@@ -32,7 +32,7 @@ const LoginModal: React.FC<Props> = ({ isOpen, onClose }: Props) => (
         render={(props) => (
           <Button
             onClick={props.onClick}
-            disabled={props.disabled}
+            isDisabled={props.disabled}
             isLoading={props.isLoading}
             borderRadius="0"
             m={5}

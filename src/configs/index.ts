@@ -1,6 +1,6 @@
-import ApiConfig from './apiConfig';
-import AuthApiConfig from './authApiConfig';
-import GoogleConfig from './googleConfig';
-import UrlikConfig from './urlikConfig';
+import getApiConfig from './apiConfig';
+import getAuthApiConfig from './authApiConfig';
+import getGoogleConfig from './googleConfig';
+import getUrlikConfig from './urlikConfig';
 
-export { ApiConfig, AuthApiConfig, GoogleConfig, UrlikConfig };
+export { getApiConfig, getAuthApiConfig, getGoogleConfig, getUrlikConfig };

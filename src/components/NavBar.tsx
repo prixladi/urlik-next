@@ -6,14 +6,19 @@ import { authorityManager } from '../clients';
 import { useRouter } from 'next/router';
 import { _Index, _Management } from '../Routes';
 
-const RightSide = () => {
+const ProfileSide = () => {
   const disclosure = useDisclosure();
   const router = useRouter();
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(null as boolean | null);
 
   useEffect(() => {
     setLoggedIn(authorityManager.isUserLoggedIn());
   }, [router]);
+
+  // Don't render on server, because of google button
+  if (loggedIn == null) {
+    return null;
+  }
 
   if (loggedIn) {
     return (
@@ -31,18 +36,18 @@ const RightSide = () => {
         </Flex>
       </>
     );
-  } else {
-    return (
-      <>
-        <Flex align="right" mr={['1em', 0, 0, 0]}>
-          <Button colorScheme="blue" borderRadius="0" onClick={disclosure.onOpen}>
-            Sign in
-          </Button>
-        </Flex>
-        <LoginModal {...disclosure} />
-      </>
-    );
   }
+
+  return (
+    <>
+      <Flex align="right" mr={['1em', 0, 0, 0]}>
+        <Button colorScheme="blue" borderRadius="0" onClick={disclosure.onOpen}>
+          Sign in
+        </Button>
+      </Flex>
+      <LoginModal {...disclosure} />
+    </>
+  );
 };
 
 const NavBar: React.FC = () => (
@@ -63,7 +68,7 @@ const NavBar: React.FC = () => (
         </Heading>
       </Flex>
 
-      <RightSide />
+      <ProfileSide />
     </Flex>
   </>
 );
