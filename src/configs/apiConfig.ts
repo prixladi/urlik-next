@@ -1,9 +1,18 @@
-import getConfig from 'next/config';
+import readConfig from 'next/config';
 
-const config = () => {
-  const { publicRuntimeConfig } = getConfig();
+type Config = { url: string };
+
+let config: Config;
+
+const getConfig = (): Config => {
+  if (config) {
+    return config;
+  }
+
+  const { publicRuntimeConfig } = readConfig();
   const { API_URL } = publicRuntimeConfig;
 
-  return { url: API_URL };
+  return (config = { url: API_URL });
 };
-export default config;
+
+export default getConfig;

@@ -21,5 +21,7 @@
         "@typescript-eslint"
     ],
     "rules": {
+        "curly": 1,
+        "quotes": [1, "single"]
     }
 }

@@ -11,7 +11,7 @@ type Props<T> = {
   pageProps: T;
 };
 
-const MyApp: React.FC<Props<any>> = ({ Component, pageProps }: Props<any>) => (
+const MyApp = ({ Component, pageProps }: Props<any>): JSX.Element => (
   <>
     <Head>
       <title>Urlik</title>

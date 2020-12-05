@@ -1,5 +1,7 @@
 import copy from 'copy-to-clipboard';
+import { FormikHelpers } from 'formik';
 import { useCallback, useMemo, useReducer } from 'react';
+import { ObjectSchema } from 'yup';
 import { Action, AnonymousValues, Handles, OnSubmmitShortenFactory, State, Values } from './types';
 
 const reducer = (state: State, action: Action): State => {
@@ -20,26 +22,32 @@ const reducer = (state: State, action: Action): State => {
         value: 'copied',
       };
     case 'copiedTimeout':
-      if (state.value == 'write')
+      if (state.value == 'write') {
         return {
           url: action.url,
           value: 'write',
         };
-      else
+      } else {
         return {
           url: action.url,
           value: 'copy',
         };
+      }
     default:
       throw new Error(`Invalid action type ${action.type}.`);
   }
 };
 
-const useShortenCopyBase = <T = Values | AnonymousValues>(onSubmmitShortenFatory: OnSubmmitShortenFactory<T>): Handles<T> => {
+const useShortenCopyBase = <T = Values | AnonymousValues>(
+  onSubmmitShortenFatory: OnSubmmitShortenFactory<T>,
+  scheme: ObjectSchema<any>
+): Handles<T> => {
   const [state, dispatch] = useReducer(reducer, { value: 'write' });
 
   const onSubmmitCopy = useCallback(async () => {
-    if (!state.url) throw Error("Can't copy url because it is not set.");
+    if (!state.url) {
+      throw Error('Can\'t copy url because it is not set.');
+    }
 
     copy(state.url);
     dispatch({
@@ -61,6 +69,10 @@ const useShortenCopyBase = <T = Values | AnonymousValues>(onSubmmitShortenFatory
     });
   }, [dispatch]);
 
+  const onSubmitPreventAction = useCallback((_, { setSubmitting }: FormikHelpers<T>) => {
+    setSubmitting(false);
+  }, []);
+
   const onSubmitShorten = useMemo(() => onSubmmitShortenFatory(dispatch), [onSubmmitShortenFatory, dispatch]);
 
   switch (state.value) {
@@ -70,6 +82,7 @@ const useShortenCopyBase = <T = Values | AnonymousValues>(onSubmmitShortenFatory
         onSubmit: onSubmitShorten,
         buttonText: 'Shorten!',
         colorScheme: 'blue',
+        validationScheme: scheme,
       };
     case 'copy':
       return {
@@ -83,9 +96,7 @@ const useShortenCopyBase = <T = Values | AnonymousValues>(onSubmmitShortenFatory
       return {
         url: state.url,
         onFormChange,
-        onSubmit: (_, { setSubmitting }) => {
-          setSubmitting(false);
-        },
+        onSubmit: onSubmitPreventAction,
         buttonText: 'Copied!',
         colorScheme: 'green',
       };

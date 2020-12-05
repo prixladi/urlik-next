@@ -1,9 +1,18 @@
-import getConfig from 'next/config';
+import readConfig from 'next/config';
 
-const config = () => {
-  const { publicRuntimeConfig } = getConfig();
+type Config = { clientId: string };
+
+let config: Config;
+
+const getConfig = (): Config => {
+  if (config) {
+    return config;
+  }
+
+  const { publicRuntimeConfig } = readConfig();
   const { GOOGLE_CLIENT_ID } = publicRuntimeConfig;
 
-  return { clientId: GOOGLE_CLIENT_ID };
+  return (config ??= { clientId: GOOGLE_CLIENT_ID });
 };
-export default config;
+
+export default getConfig;

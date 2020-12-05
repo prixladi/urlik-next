@@ -16,7 +16,9 @@ const familyNameClaim = 'family_name';
 
 const getUserProfile = (): UserProfile | null => {
   const bearerToken = localStorage.getItem('bearerToken');
-  if (!bearerToken) return null;
+  if (!bearerToken) {
+    return null;
+  }
 
   const token = jwt_decode(bearerToken) as { [claim: string]: string };
 

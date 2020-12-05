@@ -1,6 +1,6 @@
 import { getApiConfig } from '../configs';
 
-const _BaseUrl = () => getApiConfig().url;
+const _BaseUrl = (): string => getApiConfig().url;
 
 const _Urls = 'urls';
 const _UrlsAnonymous = 'urls/anonymous';

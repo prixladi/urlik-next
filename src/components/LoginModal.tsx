@@ -32,15 +32,15 @@ const LoginModal: React.FC<Props> = ({ isOpen, onClose }: Props) => (
         render={(props) => (
           <Button
             onClick={props.onClick}
-            isDisabled={props.disabled}
             isLoading={props.isLoading}
             borderRadius="0"
             m={5}
             height="2.8em"
             fontSize="1.4em"
-            colorScheme="blue"
+            colorScheme="ghost"
+            color="red.500"
           >
-            <Text mr={2}>Login With Google</Text> <FontAwesomeIcon icon={faGoogle} />
+            <FontAwesomeIcon icon={faGoogle} /> <Text ml={2}>Google</Text>
           </Button>
         )}
       />

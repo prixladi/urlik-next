@@ -8,33 +8,24 @@ import { UrlDetailModel } from '../../api';
 import { getUrlikConfig } from '../../configs';
 import { urlsService } from '../../services';
 import { ResponseError } from '../../services/urlsService';
-import { validateUrl } from '../../utils';
-import { Action, Values } from './types';
+import { Action, Handles, Values } from './types';
+import { requiredText, maxLength, minLength, validatePath, validateUrl } from '../../utils/validation';
+import * as yup from 'yup';
+import { maxPathLength, minPathLength } from '../../constants';
 
 type Errors = Partial<Values>;
 
-const validateValues = (url: URL | null, path: string): Errors | null => {
-  const urlikUrl = new URL(getUrlikConfig().url);
-  const errors = {} as Errors;
+const schema = yup.object().shape({
+  url: yup.string().required(requiredText('Url')).test(validateUrl),
+  path: yup
+    .string()
+    .min(...minLength('Path', minPathLength))
+    .max(...maxLength('Path', maxPathLength))
+    .required(requiredText('Path'))
+    .test(validatePath),
+});
 
-  if (!url) {
-    errors.url = 'Url is not valid, provide valid url eg. https://google.com.';
-  } else if (url.host == urlikUrl.host && url.port == urlikUrl.port) {
-    errors.url = "You can't shorten urlik url.";
-  }
-
-  if (path.length > 10 || path.length < 5) {
-    errors.path = 'Path must be between 5 and 10 characters long.';
-  }
-
-  if (errors.url || errors.path) {
-    return errors;
-  }
-
-  return null;
-};
-
-const validateErrorResponse = (error: ResponseError) => {
+const validateErrorResponse = (error: ResponseError): Errors => {
   if (error.status === StatusCodes.BAD_REQUEST) {
     return { url: 'Url is not valid, provide valid url eg. https://google.com.' };
   }
@@ -43,18 +34,13 @@ const validateErrorResponse = (error: ResponseError) => {
   }
 
   return { url: 'Server returned error, try again later.' };
-}
+};
 
-const useShortenCopy = (router: NextRouter) => {
+const useShortenCopy = (router: NextRouter): Handles<Values> => {
   const onSubmmitShortenFactory = useCallback(
     (dispatch: Dispatch<Action>) => async (values: Values, { setErrors }: FormikHelpers<Values>) => {
-      const url = validateUrl(values.url, true);
-      const errors = validateValues(url, values.path);
-      if (errors) {
-        return setErrors(errors);
-      }
-
-      const result = await urlsService.create(url!.href, values.path, router);
+      const url = values.url.includes('://') ? values.url : `http://${values.url}`;
+      const result = await urlsService.create(url, values.path, router);
       if ((result as UrlDetailModel).id) {
         const model = result as UrlDetailModel;
         return dispatch({
@@ -64,12 +50,12 @@ const useShortenCopy = (router: NextRouter) => {
       }
 
       const responseErrors = validateErrorResponse(result as ResponseError);
-      return setErrors(responseErrors); 
+      return setErrors(responseErrors);
     },
     [router]
   );
 
-  return useShortenCopyBase<Values>(onSubmmitShortenFactory);
+  return useShortenCopyBase<Values>(onSubmmitShortenFactory, schema);
 };
 
 export default useShortenCopy;

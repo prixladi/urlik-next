@@ -8,23 +8,19 @@ import { UrlDetailModel } from '../../api';
 import { getUrlikConfig } from '../../configs';
 import { urlsService } from '../../services';
 import { ResponseError } from '../../services/urlsService';
-import { validateUrl } from '../../utils';
-import { Action, AnonymousValues } from './types';
+import { Action, AnonymousValues, Handles } from './types';
+import * as yup from 'yup';
+import { requiredText, validateUrl } from '../../utils/validation';
 
-const useShortenCopyAnonymous = (router: NextRouter) => {
+const schema = yup.object().shape({
+  url: yup.string().test(validateUrl).required(requiredText('url')),
+});
+
+const useShortenCopyAnonymous = (router: NextRouter): Handles<AnonymousValues> => {
   const onSubmmitShortenFactory = useCallback(
     (dispatch: Dispatch<Action>) => async (values: AnonymousValues, { setErrors }: FormikHelpers<AnonymousValues>) => {
-      const urlikUrl = new URL(getUrlikConfig().url);
-      const errorModel = { url: 'Url is not valid, provide valid url eg. https://google.com.' };
-      const url = validateUrl(values.url, true);
-
-      if (!url) {
-        return setErrors(errorModel);
-      } else if (url.host == urlikUrl.host && url.port == urlikUrl.port) {
-        return setErrors({ url: "You can't shorten urlik url." });
-      }
-
-      const result = await urlsService.createAsAnonymous(url.href, router);
+      const url = values.url.includes('://') ? values.url : `http://${values.url}`;
+      const result = await urlsService.createAsAnonymous(url, router);
       if ((result as UrlDetailModel).id) {
         const model = result as UrlDetailModel;
         return dispatch({
@@ -35,7 +31,7 @@ const useShortenCopyAnonymous = (router: NextRouter) => {
 
       const error = result as ResponseError;
       if (error.status === StatusCodes.BAD_REQUEST) {
-        return setErrors(errorModel);
+        return setErrors({ url: 'Url is not valid, provide valid url eg. https://google.com.' });
       }
 
       return setErrors({ url: 'Server returned error, try again later.' });
@@ -43,7 +39,7 @@ const useShortenCopyAnonymous = (router: NextRouter) => {
     []
   );
 
-  return useShortenCopyBase<AnonymousValues>(onSubmmitShortenFactory);
+  return useShortenCopyBase<AnonymousValues>(onSubmmitShortenFactory, schema);
 };
 
 export default useShortenCopyAnonymous;

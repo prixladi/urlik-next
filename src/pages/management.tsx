@@ -1,25 +1,41 @@
 import React, { useEffect } from 'react';
 import { Text, Heading, Button, Flex, Box, Grid } from '@chakra-ui/react';
-import { Form, Formik } from 'formik';
 import { InputField } from '../components';
 import { useShortenCopy } from '../hooks';
 import { useRouter } from 'next/router';
 import { authorityManager } from '../clients';
 import { authService, notificationService } from '../services';
-
-type Values = {
-  url: string;
-  path: string;
-};
+import { Form as FormikForm } from '../components';
+import { Values } from '../hooks/useShortenCopy/types';
 
 const initialValues: Values = {
   url: '',
   path: '',
 };
 
+const Form = () => {
+  const router = useRouter();
+  const { url, onFormChange, onSubmit, buttonText, colorScheme, validationScheme } = useShortenCopy(router);
+
+  return (
+    <FormikForm<Values> validationScheme={validationScheme} onFormChange={onFormChange} onSubmit={onSubmit} initialValues={initialValues}>
+      {({ isSubmitting }) => (
+        <Grid gridGap="1em">
+          <InputField value={url} variant="filled" h="3em" name="url" placeHolder="Link to shorten" />
+          <Flex gridGap="1em">
+            <InputField variant="filled" h="3em" name="path" placeHolder="Path to use (5-10 characters)" />
+            <Button h="3em" borderRadius={0} type="submit" isLoading={isSubmitting} colorScheme={colorScheme}>
+              {buttonText}
+            </Button>
+          </Flex>
+        </Grid>
+      )}
+    </FormikForm>
+  );
+};
+
 const Management: React.FC = () => {
   const router = useRouter();
-  const { url, onFormChange, onSubmit, buttonText, colorScheme } = useShortenCopy(router);
 
   useEffect(() => {
     if (!authorityManager.isUserLoggedIn()) {
@@ -38,21 +54,7 @@ const Management: React.FC = () => {
         numbers.
       </Text>
       <Box mt={10}>
-        <Formik<Values> onSubmit={onSubmit} initialValues={initialValues}>
-          {({ isSubmitting }) => (
-            <Form onChange={onFormChange}>
-              <Grid gridGap="1em">
-                <InputField value={url} variant="filled" h="3em" name="url" placeHolder="Link to shorten" />
-                <Flex gridGap="1em">
-                  <InputField variant="filled" h="3em" name="path" placeHolder="Path to use (5-10 characters)" />
-                  <Button h="3em" borderRadius={0} type="submit" isLoading={isSubmitting} colorScheme={colorScheme}>
-                    {buttonText}
-                  </Button>
-                </Flex>
-              </Grid>
-            </Form>
-          )}
-        </Formik>
+        <Form />
       </Box>
     </>
   );
