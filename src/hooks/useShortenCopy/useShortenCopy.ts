@@ -15,7 +15,7 @@ import { maxPathLength, minPathLength } from '../../constants';
 
 type Errors = Partial<Values>;
 
-const schema = yup.object().shape({
+const schema = yup.object().shape<any>({
   url: yup.string().required(requiredText('Url')).test(validateUrl),
   path: yup
     .string()
@@ -52,7 +52,7 @@ const useShortenCopy = (router: NextRouter): Handles<Values> => {
       const responseErrors = validateErrorResponse(result as ResponseError);
       return setErrors(responseErrors);
     },
-    [router]
+    [router],
   );
 
   return useShortenCopyBase<Values>(onSubmmitShortenFactory, schema);

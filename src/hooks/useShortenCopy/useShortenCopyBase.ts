@@ -40,13 +40,13 @@ const reducer = (state: State, action: Action): State => {
 
 const useShortenCopyBase = <T = Values | AnonymousValues>(
   onSubmmitShortenFatory: OnSubmmitShortenFactory<T>,
-  scheme: ObjectSchema<any>
+  scheme: ObjectSchema<any>,
 ): Handles<T> => {
   const [state, dispatch] = useReducer(reducer, { value: 'write' });
 
   const onSubmmitCopy = useCallback(async () => {
     if (!state.url) {
-      throw Error('Can\'t copy url because it is not set.');
+      throw Error("Can't copy url because it is not set.");
     }
 
     copy(state.url);

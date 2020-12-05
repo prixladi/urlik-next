@@ -1,6 +1,7 @@
 import jwt_decode from 'jwt-decode';
+import { getBearerToken } from './helpers';
 
-type UserProfile = {
+export type UserProfile = {
   id: string;
   email: string;
   username?: string;
@@ -15,7 +16,7 @@ const givenNameClaim = 'given_name';
 const familyNameClaim = 'family_name';
 
 const getUserProfile = (): UserProfile | null => {
-  const bearerToken = localStorage.getItem('bearerToken');
+  const bearerToken = getBearerToken();
   if (!bearerToken) {
     return null;
   }

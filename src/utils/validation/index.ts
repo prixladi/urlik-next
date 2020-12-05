@@ -26,7 +26,7 @@ function validateUrl(this: TestContext<Record<string, string>>, value: string | 
     }
 
     if (url.host == urlikUrl.host && url.port == urlikUrl.port) {
-      return this.createError({ message: 'You can\'t shorten urlik url.' });
+      return this.createError({ message: "You can't shorten urlik url." });
     }
 
     return true;

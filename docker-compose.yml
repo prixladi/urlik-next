@@ -49,7 +49,7 @@ services:
     environment:
       MONGO_URL: mongodb://mongodb
       MONGO_DATABASE_NAME: urlik
-      DEFAULT_URL: https://google.com
+      DEFAULT_URL: http://localhost:3000/default
       REDIS_HOST: redis
       REDIS_PORT: 6379
       AUTHORITY_URL: http://authority/

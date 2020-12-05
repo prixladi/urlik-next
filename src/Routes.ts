@@ -1,4 +1,4 @@
-const _Index = '/';
-const _Management = '/management';
+const Index = '/';
+const Management = '/management';
 
-export { _Index, _Management };
+export { Index, Management };

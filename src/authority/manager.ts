@@ -1,4 +1,4 @@
-import { _TokenGoogle } from './Routes';
+import { TokenGoogle } from './Routes';
 import { GoogleLoginModel, TokensModel } from './models';
 import { setTokens, unsetTokens } from './helpers';
 import api, { tryRefreshToken } from './api';
@@ -25,7 +25,7 @@ const createManager = (getConfig: () => Config) => {
   const googleLogin = async (model: GoogleLoginModel, callbacks: Callbacks): Promise<Result<void>> => {
     const config = getConfig();
     const validateStatus = any200();
-    const result = await api.post(`${_TokenGoogle}`, model, { config, ...callbacks, validateStatusCode: validateStatus });
+    const result = await api.post(`${TokenGoogle}`, model, { config, ...callbacks, validateStatusCode: validateStatus });
 
     if (result) {
       const tokens = (await result.json()) as TokensModel;

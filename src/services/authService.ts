@@ -1,5 +1,5 @@
 import { GoogleLoginModel } from '../authority';
-import { _Index, _Management } from '../Routes';
+import { Index, Management } from '../Routes';
 import { authorityManager } from '../clients';
 import { NextRouter } from 'next/router';
 import { notificationService } from '.';
@@ -12,7 +12,7 @@ type Callbacks = {
 const createCallbacks = (router: NextRouter): Callbacks => ({
   onUnauthorized: () => {
     notificationService.loggedOut();
-    router.push(_Index);
+    router.push(Index);
     return Promise.resolve();
   },
   onError: (err: unknown) => {
@@ -26,14 +26,13 @@ const googleLogin = async (model: GoogleLoginModel, router: NextRouter): Promise
   const result = await authorityManager.googleLogin(model, createCallbacks(router));
 
   if (result.ok) {
-    notificationService.loggedIn();
-    router.push(_Management);
+    router.push(Management);
   }
 };
 
 const logout = async (router: NextRouter): Promise<void> => {
   await authorityManager.logout();
-  router.push(_Index);
+  router.push(Index);
 };
 
 export { googleLogin, logout };

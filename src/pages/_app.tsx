@@ -11,7 +11,7 @@ type Props<T> = {
   pageProps: T;
 };
 
-const MyApp = ({ Component, pageProps }: Props<any>): JSX.Element => (
+const MyApp = ({ Component, pageProps }: Props<never>): JSX.Element => (
   <>
     <Head>
       <title>Urlik</title>

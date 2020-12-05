@@ -1,6 +1,6 @@
 import React from 'react';
-import { Heading, Button, Flex, Box } from '@chakra-ui/react';
-import { InputField, InfoText } from '../components';
+import { Button, Flex, Box } from '@chakra-ui/react';
+import { InputField, InfoText, Headline } from '../components';
 import { useShortenCopyAnonymous } from '../hooks';
 import { useRouter } from 'next/router';
 import { AnonymousValues } from '../hooks/useShortenCopy/types';
@@ -35,9 +35,7 @@ const Form = () => {
 
 const Index: React.FC = () => (
   <>
-    <Heading mb={5} textAlign="center" fontSize={['2.4em', '3em', '3em', '3.5em']} as="h1">
-      Shorten links, collect statistics
-    </Heading>
+    <Headline>Shorten links, collect statistics</Headline>
     <InfoText>
       Generate a shortcut for your link or log in and choose your personal shortcut. As a logged user you can also gather additional
       statistics about your link shortcuts.

@@ -1,6 +1,6 @@
-import { getRefreshToken, setTokens, unsetTokens } from './helpers';
+import { getBearerToken, getRefreshToken, setTokens, unsetTokens } from './helpers';
 import { TokensModel } from './models';
-import { _TokenRefresh } from './Routes';
+import { TokenRefresh } from './Routes';
 import { StatusCodes } from 'http-status-codes';
 import { Config } from './config';
 import buildUrl from 'build-url';
@@ -26,7 +26,7 @@ const { UNAUTHORIZED } = StatusCodes;
 const getHeaders = (shouldAuth?: boolean): string[][] => {
   const headers = [['Content-Type', 'application/json']];
   if (shouldAuth) {
-    headers.push(['Authorization', `Bearer ${localStorage.getItem('bearerToken')}`]);
+    headers.push(['Authorization', `Bearer ${getBearerToken()}`]);
   }
 
   return headers;
@@ -39,7 +39,7 @@ const tryRefreshToken = async (options: Options): Promise<boolean> => {
   }
 
   try {
-    const url = buildUrl(options.config.url, { path: _TokenRefresh });
+    const url = buildUrl(options.config.url, { path: TokenRefresh });
     const result = await fetch(url, {
       method: 'post',
       body: JSON.stringify({ refreshToken: token }),

@@ -1,10 +1,10 @@
 import axios from 'axios';
-import { _BaseUrl } from './Routes';
+import { BaseUrl } from './Routes';
 import { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { StatusCodes } from 'http-status-codes';
 import { Manager } from '../authority';
 import { NextRouter } from 'next/router';
-import { _Index } from '../Routes';
+import { Index } from '../Routes';
 import { notificationService } from '../services';
 
 type Client = {
@@ -25,10 +25,7 @@ type CallAction<T> = (client: AxiosInstance, config: AxiosRequestConfig) => Prom
 
 const { OK, MULTIPLE_CHOICES, UNAUTHORIZED } = StatusCodes;
 
-const createAxions = () =>
-  axios.create({
-    baseURL: _BaseUrl(),
-  });
+const client = axios.create();
 
 const getHeaders = (options: Options) => {
   if (options.shouldAuth) {
@@ -52,7 +49,7 @@ const validateStatus = (options: Options) => (status: number) => {
 const createCallbacks = (router: NextRouter) => ({
   onUnauthorized: () => {
     notificationService.loggedOut();
-    router.push(_Index);
+    router.push(Index);
     return Promise.resolve();
   },
   onError: (err: unknown) => {
@@ -65,19 +62,18 @@ const createCallbacks = (router: NextRouter) => ({
 const createClient = (manager: Manager): Client => {
   const call = async <T>(action: CallAction<T>, options: Options) => {
     try {
-      const client = createAxions();
       const config: AxiosRequestConfig = {
         validateStatus: validateStatus(options),
         ...options,
       };
 
-      const response = await action(client, { ...config, headers: getHeaders(options) });
+      const response = await action(client, { baseURL: BaseUrl(), ...config, headers: getHeaders(options) });
 
       if (response.status === UNAUTHORIZED) {
         if (await manager.refreshToken(createCallbacks(options.router))) {
           return await action(client, { ...config, headers: getHeaders(options) });
         } else {
-          options.router.push(_Index);
+          options.router.push(Index);
           return null;
         }
       }

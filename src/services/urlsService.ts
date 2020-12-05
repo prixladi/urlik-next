@@ -1,15 +1,18 @@
+import { StatusCodes } from 'http-status-codes';
 import { NextRouter } from 'next/router';
-import { UrlDetailModel, _Urls, _UrlsAnonymous } from '../api';
+import { UrlDetailModel, Urls, UrlsAnonymous } from '../api';
 import { apiClient } from '../clients';
+
+const { OK, CREATED, BAD_REQUEST, CONFLICT } = StatusCodes;
 
 export type ResponseError = {
   status?: number;
 };
 
 const createAsAnonymous = async (url: string, router: NextRouter): Promise<UrlDetailModel | ResponseError> => {
-  const response = await apiClient.post<UrlDetailModel>(_UrlsAnonymous, { url }, { router, expectedStatus: [200, 201, 400] });
+  const response = await apiClient.post<UrlDetailModel>(UrlsAnonymous, { url }, { router, expectedStatus: [OK, CREATED, BAD_REQUEST] });
 
-  if (!response || response?.status === 400) {
+  if (!response || response?.status === BAD_REQUEST) {
     return {
       status: response?.status,
     };
@@ -20,12 +23,12 @@ const createAsAnonymous = async (url: string, router: NextRouter): Promise<UrlDe
 
 const create = async (url: string, path: string, router: NextRouter): Promise<UrlDetailModel | ResponseError> => {
   const response = await apiClient.post<UrlDetailModel>(
-    _Urls,
+    Urls,
     { url, path },
-    { router, expectedStatus: [200, 201, 400, 409], shouldAuth: true }
+    { router, expectedStatus: [OK, CREATED, BAD_REQUEST, CONFLICT], shouldAuth: true },
   );
 
-  if (!response || response?.status >= 400) {
+  if (!response || response?.status >= BAD_REQUEST) {
     return {
       status: response?.status,
     };
