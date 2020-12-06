@@ -16,6 +16,7 @@ const MyApp = ({ Component, pageProps }: Props<never>): JSX.Element => (
     <Head>
       <title>Urlik</title>
       <meta name="viewport" content="width=device-width, initial-scale=1" />
+      <script src="/config.js"></script>
     </Head>
     <ChakraProvider resetCSS theme={theme}>
       <Layout>

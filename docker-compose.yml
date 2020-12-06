@@ -62,6 +62,20 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379 
 
+  next:
+    image: shamyr/urlik/next
+    ports: 
+      - 3000:3000 
+    environment:
+      API_URL: http://localhost:8000/api
+      URLIK_URL: http://localhost:8000
+      AUTH_API_URL: http://localhost:8080/api/v1
+      AUTH_API_CLIENT_ID: 5f881d54384e9c6ee9a9ca33
+      GOOGLE_CLIENT_ID: 448445350491-09ogqlcf2fj370b741igbafb0au9tu0b.apps.googleusercontent.com
+    build:
+      context: .
+      dockerfile: ./Dockerfile  
+
 volumes:
   mongodata:
   redisdata:
