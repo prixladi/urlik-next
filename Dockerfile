@@ -10,6 +10,7 @@ RUN apk update && apk add dos2unix
 RUN dos2unix ./docker/run.sh
 
 FROM node:15.3.0-alpine3.10
+
 WORKDIR /app
 COPY --from=build /app/package.json /app/yarn.lock ./
 COPY --from=build /app/.next ./.next

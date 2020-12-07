@@ -5,7 +5,7 @@ For everything to function properly should be run together with [Backend](https:
 
 ## Yarn
 
-When using **Yarn** keep in mind that you need to run additional services for the worker to function properly. You can use docker as described below. If you decide to use another method you will probably need to change the default configuration.
+When using **Yarn** keep in mind that you need to run additional services for the app to function properly. You can use docker as described below. If you decide to use another method you will probably need to change the default configuration.
 
 ### `yarn dev`
 

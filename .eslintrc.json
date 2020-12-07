@@ -23,5 +23,13 @@
     "rules": {
         "curly": 1,
         "quotes": [1, "single", { "avoidEscape": true }]
-    }
+    },
+    "overrides": [
+      {
+        "files": ["**/*.json"],
+        "rules": {
+          "quotes": [2, "double"]
+        }
+      }
+    ]
 }
