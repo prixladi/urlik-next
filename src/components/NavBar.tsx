@@ -70,24 +70,13 @@ const ProfileSide = () => {
 };
 
 const NavBar: React.FC = () => (
-  <>
-    <Flex
-      w={[330, 480, 700, 770]}
-      position="fixed"
-      as="nav"
-      align="center"
-      justify="space-between"
-      wrap="wrap"
-      pt="1.5rem"
-      bg="transparent"
-    >
-      <Flex align="left" ml={['1em', 0, 0, 0]}>
-        <LogoLink />
-      </Flex>
-
-      <ProfileSide />
+  <Flex w={[330, 480, 700, 770]} position="fixed" as="nav" align="center" justify="space-between" wrap="wrap" pt="1.5rem" bg="transparent">
+    <Flex align="left" ml={['1em', 0, 0, 0]}>
+      <LogoLink />
     </Flex>
-  </>
+
+    <ProfileSide />
+  </Flex>
 );
 
 export default NavBar;

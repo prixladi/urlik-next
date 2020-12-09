@@ -10,10 +10,10 @@
     "start": "next start",
     "eslint:check": "eslint -c .eslintrc.json src/**",
     "eslint:fix": "eslint -c .eslintrc.json --fix  src/**",
-    "prettier:check": "prettier -l src/**",
-    "prettier:fix": "prettier --write src/**",
-    "code:check": "yarn eslint:check && yarn prettier:check",
-    "code:fix": "yarn eslint:fix && yarn prettier:fix"
+    "format:check": "prettier -l \"**/*.{js,jsx,ts,tsx,md}\"",
+    "format:fix": "prettier --write \"**/*.{js,jsx,ts,tsx,md}\"",
+    "code:check": "yarn eslint:check && yarn format:check",
+    "code:fix": "yarn eslint:fix && yarn format:fix"
   },
   "dependencies": {
     "@chakra-ui/icons": "^1.0.0",
@@ -35,7 +35,6 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-google-login": "^5.1.25",
-    "react-toastify": "^6.1.0",
     "yup": "^0.32.1"
   },
   "devDependencies": {

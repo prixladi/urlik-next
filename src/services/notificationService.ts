@@ -1,23 +1,28 @@
-import { toast } from 'react-toastify';
+import { createStandaloneToast, UseToastOptions } from '@chakra-ui/react';
+
+const send = (options: UseToastOptions) => {
+  const toast = createStandaloneToast();
+  toast(options);
+};
 
 const authServerError = (): void => {
-  toast.error('Authorization server returned error response.');
+  send({ description: 'Authorization server returned error response.', status: 'error' });
 };
 
 const apiServerError = (): void => {
-  toast.error('Aplication server returned error response.');
+  send({ description: 'Aplication server returned error response.', status: 'error' });
 };
 
 const loggedIn = (): void => {
-  toast.success('Successfuly logged in.');
+  send({ description: 'Successfuly logged in.', status: 'success' });
 };
 
 const loggedOut = (): void => {
-  toast.info('You session expired please log in again.');
+  send({ description: 'You session expired please log in again.', status: 'info' });
 };
 
 const loginNeeded = (): void => {
-  toast.info('You need to login first.');
+  send({ description: 'You need to login first.', status: 'info' });
 };
 
 export { authServerError, apiServerError, loggedIn, loggedOut, loginNeeded };

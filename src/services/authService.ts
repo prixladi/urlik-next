@@ -26,6 +26,7 @@ const googleLogin = async (model: GoogleLoginModel, router: NextRouter): Promise
   const result = await authorityManager.googleLogin(model, createCallbacks(router));
 
   if (result.ok) {
+    notificationService.loggedIn();
     router.push(Management);
   }
 };
