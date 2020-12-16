@@ -1,7 +1,7 @@
 # Urlik Next
 
-Frontend for [Urlik](https://github.com/prixladi/shamyr-urlik) project.<br />
-For everything to function properly should be run together with [Backend](https://github.com/prixladi/shamyr-urlik-server).
+Frontend for [Urlik](https://github.com/prixladi/urlik) project.<br />
+For everything to function properly should be run together with [Backend](https://github.com/prixladi/urlik-server).
 
 ## Yarn
 
