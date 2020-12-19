@@ -3,8 +3,6 @@ import { ChakraProvider } from '@chakra-ui/react';
 import theme from '../theme';
 import Layout from '../components/Layout';
 import Head from 'next/head';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 type Props<T> = {
   Component: React.FC<T>;
@@ -22,7 +20,6 @@ const MyApp = ({ Component, pageProps }: Props<never>): JSX.Element => (
       <Layout>
         <Component {...pageProps} />
       </Layout>
-      <ToastContainer />
     </ChakraProvider>
   </>
 );
