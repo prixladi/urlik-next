@@ -23,7 +23,7 @@ const Form = () => {
         <Grid gridGap="1em">
           <InputField value={url} variant="filled" h="3em" name="url" placeHolder="Link to shorten" />
           <Flex gridGap="1em">
-            <InputField variant="filled" h="3em" name="path" placeHolder="Path to use (5-10 characters)" />
+            <InputField variant="filled" h="3em" name="path" placeHolder="Path to use (5-20 characters)" />
             <Button h="3em" borderRadius={0} type="submit" isLoading={isSubmitting} colorScheme={colorScheme}>
               {buttonText}
             </Button>

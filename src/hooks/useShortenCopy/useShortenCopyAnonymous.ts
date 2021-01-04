@@ -36,7 +36,7 @@ const useShortenCopyAnonymous = (router: NextRouter): Handles<AnonymousValues> =
 
       return setErrors({ url: 'Server returned error, try again later.' });
     },
-    [],
+    [router],
   );
 
   return useShortenCopyBase<AnonymousValues>(onSubmmitShortenFactory, schema);
