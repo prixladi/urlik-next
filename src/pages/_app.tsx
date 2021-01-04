@@ -3,13 +3,9 @@ import { ChakraProvider } from '@chakra-ui/react';
 import theme from '../theme';
 import Layout from '../components/Layout';
 import Head from 'next/head';
+import { AppProps } from 'next/app';
 
-type Props<T> = {
-  Component: React.FC<T>;
-  pageProps: T;
-};
-
-const MyApp = ({ Component, pageProps }: Props<never>): JSX.Element => (
+const App = ({ Component, pageProps }: AppProps): JSX.Element => (
   <>
     <Head>
       <title>Urlik</title>
@@ -24,4 +20,4 @@ const MyApp = ({ Component, pageProps }: Props<never>): JSX.Element => (
   </>
 );
 
-export default MyApp;
+export default App;

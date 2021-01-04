@@ -21,7 +21,19 @@ type Callbacks = {
   onUnauthorized: () => Promise<void>;
 };
 
-const createManager = (getConfig: () => Config) => {
+type Manager = {
+  getUserProfile: () => utils.UserProfile | null;
+  isUserLoggedIn: () => boolean;
+  googleLogin: (model: GoogleLoginModel, callbacks: Callbacks) => Promise<Result<void>>;
+  refreshToken: (callbacks: Callbacks) => Promise<boolean>;
+  logout: () => Promise<void>;
+  getTokens: () => {
+    bearerToken: string | null;
+    refreshToken: string | null;
+  };
+};
+
+const createManager = (getConfig: () => Config): Manager => {
   const googleLogin = async (model: GoogleLoginModel, callbacks: Callbacks): Promise<Result<void>> => {
     const config = getConfig();
     const validateStatus = any200();

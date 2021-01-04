@@ -18,7 +18,7 @@ const loggedIn = (): void => {
 };
 
 const loggedOut = (): void => {
-  send({ description: 'You session expired please log in again.', status: 'info' });
+  send({ description: 'You session expired please sign in again.', status: 'info' });
 };
 
 const loginNeeded = (): void => {
